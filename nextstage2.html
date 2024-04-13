@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>odysseus returns! by raisa.</title>
+<link rel="icon" type="image/png" sizes="54x54" href="iconking.png">
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
@@ -68,7 +69,7 @@
 }
 
 #mc {
-    bottom: 20%;
+    bottom: 170px;
     left: 30%;
     background-image: url('ody99.png');
     background-size: contain;
@@ -209,7 +210,6 @@ const option1Box = document.getElementById('option-box-1');
 const option2Box = document.getElementById('option-box-2');
 
 let mcXPos = 350;
-let mcYPos = 380;
 const mcSpeed = 6;
 let facingRight = true;
 
@@ -218,7 +218,6 @@ const npcYPos = 150;
 
 function updateCharacterPosition() {
     mc.style.left = mcXPos + 'px';
-    mc.style.top = mcYPos + 'px';
 }
 
 function moveMC(event) {
