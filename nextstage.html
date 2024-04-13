@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>odysseus returns! by raisa.</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Schoolbell&display=swap');
+
+.screen {
+    display: none;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-size: auto 100%;
+    background-position: center;
+    z-index: 3;
+}
+
+.border {
+    position: fixed;
+    top: 0;
+    width: 15%; 
+    height: 100%;
+    background-color: black;
+    z-index: 9999;
+}
+
+.border.left {
+    left: 0;
+}
+
+.border.right {
+    right: 0;
+}
+
+#bg-image {
+    position: fixed;
+    top: 0;
+    align-content: center;
+    height: 100%;
+    width: 90%;
+    z-index: -1; 
+    pointer-events: none;
+}
+
+#ground {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 170px;
+    background-color: #222222;
+    z-index: 1;
+    border: 4px solid black;
+}
+
+.character {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    overflow: visible;
+}
+
+#mc {
+    bottom: 20%;
+    left: 30%;
+    background-image: url('ody99.png');
+    background-size: contain;
+    height: 180px;
+    width: 230px;
+    background-repeat: no-repeat;
+}
+
+#npc {
+    bottom: 190px;
+    right: 450px;
+    background-image: url('achilles.png');
+    background-size: cover;
+    animation: floatAnimation 2s ease-in-out infinite alternate;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 300px;
+    height: 200px;
+}
+
+#interaction-button {
+    display: none;
+    position: absolute;
+    font-family: 'Schoolbell';
+    font-size: 24px;
+    color: white;
+    font-weight: bold;
+    bottom: 250px;
+    right: 250px;
+    transform: translateX(-50%);
+    padding: 0px 15px;
+    background-color: #222222;
+    border: 4px solid white;
+    cursor: pointer;
+}
+
+#message-box {
+    display: none;
+    font-family: 'Schoolbell';
+    font-size: 24px;
+    color: white;
+    position: absolute;
+    z-index: 10000;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0px 15px;
+    background-color: black;
+    border: 4px solid white;
+}
+
+#option-box {
+    display: none;
+    position: absolute;
+    top: 60%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    padding: 20px;
+    z-index: 10001;
+    text-align: left;
+}
+
+#option-box-1,
+#option-box-2 {
+    display: block;
+    margin: 10px auto;
+    padding: 0px 15px;
+    font-family: 'Schoolbell';
+    font-size: 18px;
+    color: white;
+    background-color: #222222;
+    border: 4px solid white;
+    cursor: pointer;
+}
+    
+@keyframes floatAnimation {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-10px);
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="border left"></div>
+<div class="border right"></div>
+
+<div id="start-screen" class="screen" style="background-image: url('proceed.jpg')"></div>
+<div id="second-screen" class="screen" style="background-image: url('start2.jpg')"></div>
+<div id="prologue-screen" class="screen" style="background-image: url('prologue2.jpg')"></div>
+<div id="end-screen" class="screen" style="background-image: url('end1.jpg')"></div>
+
+<img id="bg-image" src="bgdark2.jpg" alt="Background Image">
+
+<div id="ground"><div id="message-box"></div></div>
+
+<div id="option-box">
+    <div id="option-box-1">Look for your wife based on the shades' clues.</div>
+    <div id="option-box-2">I'm spooked out after meeting these dead people. I give up.</div>
+</div>
+
+    
+<div id="mc" class="character"></div>
+<div id="npc" class="character"></div>
+<button id="interaction-button">interact</button>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const startScreen = document.getElementById('start-screen');
+    const secondScreen = document.getElementById('second-screen');
+    const prologueScreen = document.getElementById('prologue-screen');
+    const endScreen = document.getElementById('end-screen');
+    let currentScreen = startScreen;
+
+    function showNextScreen() {
+        currentScreen.style.display = 'none';
+    }
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === ' ') {
+            showNextScreen();
+        }
+    });
+
+    startScreen.style.display = 'block';
+});
+
+const mc = document.getElementById('mc');
+const npc = document.getElementById('npc');
+const interactionButton = document.getElementById('interaction-button');
+const messageBox = document.getElementById('message-box');
+const optionBox = document.getElementById('option-box');
+const option1Box = document.getElementById('option-box-1');
+const option2Box = document.getElementById('option-box-2');
+
+let mcXPos = 350;
+let mcYPos = 380;
+const mcSpeed = 6;
+let facingRight = true;
+
+const npcXPos = 150;
+const npcYPos = 150;
+
+function updateCharacterPosition() {
+    mc.style.left = mcXPos + 'px';
+    mc.style.top = mcYPos + 'px';
+}
+
+function moveMC(event) {
+    switch(event.key) {
+        case 'ArrowLeft':
+            mcXPos -= mcSpeed;
+            if (facingRight) {
+                mc.style.transform = 'scaleX(-1)';
+                facingRight = false;
+            }
+            break;
+        case 'ArrowRight':
+            mcXPos += mcSpeed;
+            if (!facingRight) {
+                mc.style.transform = 'scaleX(1)';
+                facingRight = true;
+            }
+            break;
+    }
+    updateCharacterPosition();
+    checkNPCInteraction();
+}
+
+function checkNPCInteraction() {
+    const mcRect = mc.getBoundingClientRect();
+    const npcRect = npc.getBoundingClientRect();
+    if (mcRect.right >= npcRect.left && mcRect.left <= npcRect.right && mcRect.bottom >= npcRect.top && mcRect.top <= npcRect.bottom) {
+        interactionButton.style.display = 'block';
+    } else {
+        interactionButton.style.display = 'none';
+    }
+}
+
+let currentDialogueIndex = 0;
+const dialogues = ["Odysseus: Arrow on the heel, hmm... Is that you, Achilles? Since when do you have a twin?",
+    "Shade 1: Oh, this is Patroclus.",
+    "Odysseus: Oh, so you guys got reunited at last!",
+    "Shade 2: You can tell it's me because I have Hector's spear in me while his brother's arrow pierces Achilles.",
+    "Shade 1: Yep, the only thing that distinguishes us is how we were killed because that's how we are restored in Hades.",
+    "Shade 2: And I was just impersonating him when I died, that's why we have the same ghost form.",
+    "Shade 1: Well, you did say I was *mocks Patroclus* 'half my soul, as the poets say'",
+    "Shade 2: When on earth?!",
+    "Shade 1: *ahem*",
+    "Shade 2: Don't tell me you read that book…",
+    "Shade 1: What else am I supposed to do in this godsforsaken Underworld?!",
+    "Shade 2: Speaking of, what are you doing here in the Underworld, Odysseus?",
+    "Odysseus: Looking to reunite with my wife after she got killed.",
+    "Shade 1: Oh! I did just see someone screaming your name, but she did seem a bit crazy though.",
+    "Shade 2: Seems like she had it rough, buddy. Go save your wife!",
+    "Odysseus: Thanks, guys!"];
+
+function interactWithNPC() {
+    displayNextDialogue();
+    messageBox.style.display = 'block';
+    document.addEventListener('keydown', handleKeyDown);
+    interactionButton.innerText = "continue";
+}
+
+function handleKeyDown(event) {
+    if (event.key === 'Enter') {
+        displayNextDialogue();
+    }
+}
+
+function displayNextDialogue() {
+    if (currentDialogueIndex < dialogues.length) {
+        messageBox.innerText = dialogues[currentDialogueIndex];
+        currentDialogueIndex++;
+    } else {
+        currentDialogueIndex = 15;
+        showOptionBox();
+        messageBox.style.display = 'none';
+        document.removeEventListener('keydown', handleKeyDown);
+    }
+}
+    
+function showOptionBox(){
+    optionBox.style.display = 'block';
+}
+
+window.addEventListener('keydown', moveMC);
+interactionButton.addEventListener('click', interactWithNPC);
+    
+option2Box.addEventListener('click', function(){
+    const startScreen = document.getElementById('end-screen');
+    const secondScreen = document.getElementById('second-screen');
+    const prologueScreen = document.getElementById('prologue-screen');
+    const endScreen = document.getElementById('end-screen');
+    let currentScreen = startScreen;
+    currentScreen.style.display = 'none';
+    currentScreen = endScreen;
+    currentScreen.style.display = 'block';
+    optionBox.style.display = 'none';
+    document.addEventListener('keydown', function(event) {
+        if (event.key === ' ') {
+            currentScreen.style.display = 'none';
+            optionBox.style.display = 'block';
+        }
+    });
+})
+
+option1Box.addEventListener('click', function(){
+    window.location.href = 'nextstage2.html';
+});   
+    
+</script>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>odysseus returns! by raisa.</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Schoolbell&display=swap');
+
+.screen {
+    display: none;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-size: auto 100%;
+    background-position: center;
+    z-index: 3;
+}
+
+.border {
+    position: fixed;
+    top: 0;
+    width: 15%; 
+    height: 100%;
+    background-color: black;
+    z-index: 9999;
+}
+
+.border.left {
+    left: 0;
+}
+
+.border.right {
+    right: 0;
+}
+
+#bg-image {
+    position: fixed;
+    top: 0;
+    align-content: center;
+    height: 100%;
+    width: 90%;
+    z-index: -1; 
+    pointer-events: none;
+}
+
+</style>
+</head>
+<body>
+
+<div class="border left"></div>
+<div class="border right"></div>
+
+<div id="screen1" class="screen" style="background-image: url('6.jpg')"></div>
+<div id="screen2" class="screen" style="background-image: url('7.jpg')"></div>
+<div id="screen3" class="screen" style="background-image: url('8.jpg')"></div>
+<div id="screen4" class="screen" style="background-image: url('9.jpg')"></div>
+<div id="screen5" class="screen" style="background-image: url('10.jpg')"></div>
+<div id="screen6" class="screen" style="background-image: url('wontwe.jpg')"></div>
+<div id="screen7" class="screen" style="background-image: url('13.jpg')"></div>
+<div id="screen8" class="screen" style="background-image: url('14.jpg')"></div>
+<div id="screen9" class="screen" style="background-image: url('15.jpg')"></div>
+
+<img id="bg-image" src="bgdark2.jpg" alt="Background Image">
+
+<script>
+const screens = [
+    document.getElementById('screen1'),
+    document.getElementById('screen2'),
+    document.getElementById('screen3'),
+    document.getElementById('screen4'),
+    document.getElementById('screen5'),
+    document.getElementById('screen6'),
+    document.getElementById('screen7'),
+    document.getElementById('screen8'),
+    document.getElementById('screen9')
+];
+
+let currentScreenIndex = 0;
+
+function showNextScreen() {
+    if (currentScreenIndex < screens.length - 1) {
+        screens[currentScreenIndex].style.display = 'none';
+        currentScreenIndex = (currentScreenIndex + 1) % screens.length;
+        screens[currentScreenIndex].style.display = 'block';
+    }
+}
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === ' ') {
+        showNextScreen();
+    }
+});
+
+document.getElementById('screen1').style.display = 'block';
+</script>
+
+</body>
+</html>
+
+
+
+
